@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/controller/auth/OpenShop.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/util/Mail.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/util/HibernateUtil.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/util/GenerateKey.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/controller/auth/SignUp.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/controller/auth/Login.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/util/Validations.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/dto/request/UserDTO.java</file>
+            <file>file:/D:/Programming/Projects/WEB%202/my-fresh-goods-api-main/src/java/controller/item/ItemAdd.java</file>
+        </group>
+    </open-files>
+</project-private>
