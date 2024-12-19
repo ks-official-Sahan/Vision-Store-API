@@ -1,31 +1,32 @@
 package dto.response;
 
+import dto.ItemDTO;
 import entity.Item;
 import java.io.Serializable;
 import java.util.List;
 
 public class SingleItemResponseDTO implements Serializable{
     
-    private Item singleItem;
+    private ItemDTO singleItem;
     
-    private List<Item> similarItems;
+    private List<ItemDTO> similarItems;
 
     public SingleItemResponseDTO() {
     }
 
-    public Item getSingleItem() {
+    public ItemDTO getSingleItem() {
         return singleItem;
     }
 
-    public void setSingleItem(Item singleItem) {
+    public void setSingleItem(ItemDTO singleItem) {
         this.singleItem = singleItem;
     }
 
-    public List<Item> getSimilarItems() {
+    public List<ItemDTO> getSimilarItems() {
         return similarItems;
     }
 
-    public void setSimilarItems(List<Item> similarItems) {
+    public void setSimilarItems(List<ItemDTO> similarItems) {
         this.similarItems = similarItems;
     }
 

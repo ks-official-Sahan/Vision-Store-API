@@ -14,10 +14,14 @@ public class CartItemDTO {
     private int itemId;
 
     private String itemName;
+    
+    private String itemImagePath;
 
     private Double price;
 
     private int qty;
+    
+    private int itemQty;
 
     public CartItemDTO() {
     }
@@ -68,6 +72,22 @@ public class CartItemDTO {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public String getItemImagePath() {
+        return itemImagePath;
+    }
+
+    public void setItemImagePath(String itemImagePath) {
+        this.itemImagePath = itemImagePath;
+    }
+
+    public int getItemQty() {
+        return itemQty;
+    }
+
+    public void setItemQty(int itemQty) {
+        this.itemQty = itemQty;
     }
 
   

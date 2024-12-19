@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.search;
 
 import com.google.gson.Gson;
 import dto.request.ProductSearchDTO;
 import dto.response.ProductSearchResponse;
+import dto.response.ResponseDTO;
 import entity.Category;
 import entity.Item;
 import java.io.IOException;
@@ -24,7 +21,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import util.HibernateUtil;
 
-
 @WebServlet(name = "SearchItems", urlPatterns = {"/SearchItems"})
 public class SearchItems extends HttpServlet {
 
@@ -37,6 +33,8 @@ public class SearchItems extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        ResponseDTO responseDTO = new ResponseDTO();
 
         try {
 
@@ -59,24 +57,6 @@ public class SearchItems extends HttpServlet {
 
                 //fillter products by category
                 criteria1.add(Restrictions.eq("category", category));
-            }
-
-            //add freshness fillter
-            if (productSearchDTO.getFreshness() != 0) {
-
-                if (productSearchDTO.getFreshness() <= 10) {
-
-                    // freshness selected
-                    int freshness = productSearchDTO.getFreshness();
-
-                    //fillter products by freshness
-                    criteria1.add(Restrictions.eq("freshness", freshness));
-
-                } else {
-
-                    // not valid freshness days
-                }
-
             }
 
             ////sort section start
@@ -110,26 +90,29 @@ public class SearchItems extends HttpServlet {
             List<Item> itemList = criteria1.list();
 
             for (Item item : itemList) {
-
                 item.setShop(null);
-
             }
 
             productSearchResponse.setItems(itemList);
 
-            response.setContentType("application/json");
-            response.getWriter().print(gson.toJson(productSearchResponse));
+            // response.getWriter().print(gson.toJson(productSearchResponse));
+            responseDTO.setData(productSearchResponse);
+            responseDTO.setStatus(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            responseDTO.setMessage("server error");
+            responseDTO.setCode(500);
         }
 
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(responseDTO));
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+        ResponseDTO responseDTO = new ResponseDTO();
 
+        try {
             String text = request.getParameter("text");
             Session session = HibernateUtil.getSessionFactory().openSession();
             if (!text.isEmpty()) {
@@ -156,15 +139,19 @@ public class SearchItems extends HttpServlet {
                     }
 
                 }
-
-                response.setContentType("application/json");
-                response.getWriter().print(gson.toJson(categoryList));
+                // response.getWriter().print(gson.toJson(categoryList));
+                responseDTO.setData(categoryList);
+                responseDTO.setStatus(true);
 
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            responseDTO.setMessage("server error");
+            responseDTO.setCode(500);
         }
+
+        response.setContentType("application/json");
+        response.getWriter().write(gson.toJson(responseDTO));
     }
 
 }

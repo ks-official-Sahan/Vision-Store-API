@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.item;
 
 
@@ -13,9 +9,7 @@ import entity.Category;
 import entity.City;
 import entity.ItemStatus;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,14 +24,8 @@ import util.HibernateUtil;
 @WebServlet(name = "GetFeatures", urlPatterns = {"/GetFeatures"})
 public class GetFeatures extends HttpServlet {
 
-  
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-  
-
-       
 
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
@@ -51,24 +39,20 @@ public class GetFeatures extends HttpServlet {
             List<CategoryDTO> categoryDTOList = new ArrayList<>();
 
             for (Category category : categoryList) {
-
                 CategoryDTO categoryDTO = new CategoryDTO();
                 categoryDTO.setId(category.getId());
                 categoryDTO.setName(category.getName());
                 categoryDTOList.add(categoryDTO);
-
             }
 
             List<ItemStatusDTO> itemStatusesDTOList = new ArrayList<>();
 
             for (ItemStatus itemStatus : itemStatusList) {
-
                 ItemStatusDTO itemStatusDTO = new ItemStatusDTO();
                 itemStatusDTO.setId(itemStatus.getId());
                 itemStatusDTO.setStatus(itemStatus.getStatus());
 
                 itemStatusesDTOList.add(itemStatusDTO);
-
             }
             
             Criteria criteria3 = session.createCriteria(City.class);

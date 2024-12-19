@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.checkout;
 
 import com.google.gson.Gson;
@@ -43,7 +39,6 @@ public class GetCheckout extends HttpServlet {
             Session session = HibernateUtil.getSessionFactory().openSession();
 
             if (httpSession.getAttribute("user") != null) {
-
                 // login user
                 UserDTO userDTO = (UserDTO) httpSession.getAttribute("user");
 
@@ -70,10 +65,8 @@ public class GetCheckout extends HttpServlet {
                 List<Cart> cartList = criteria4.list();
                 
                 for(Cart cart : cartList){
-                
                     cart.setUser(null);
                     cart.getItem().getShop().setOwner(null);
-                
                 }
                 
                 GetCheckoutDTO getCheckoutDTO = new GetCheckoutDTO();
@@ -84,17 +77,16 @@ public class GetCheckout extends HttpServlet {
                 responseDTO.setMessage("success");
                 responseDTO.setData(getCheckoutDTO);
                 
-                
             } else {
-
                 responseDTO.setMessage("Not signed in");
-
             }
 
         } catch (Exception e) {
             responseDTO.setMessage("server error");
+            responseDTO.setCode(500);
         }
 
+        response.setContentType("application/json");
         response.getWriter().write(gson.toJson(responseDTO));
     }
 

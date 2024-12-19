@@ -1,5 +1,6 @@
 package entity;
 
+import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,10 +30,12 @@ public class Shop implements Serializable {
     @JoinColumn(name = "shop_address_id")
     private ShopAddress shopAddress;
 
+    @Expose(deserialize = true, serialize = false)
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
+    @Expose(deserialize = true, serialize = false)
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = true)
     private Owner owner;

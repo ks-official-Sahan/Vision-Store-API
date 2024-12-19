@@ -14,6 +14,8 @@ public class UserDTO implements Serializable {
     @Expose(deserialize = true, serialize = false)
     private String password;
 
+    @Expose
+    private String role;
  
     public UserDTO() {
     }
@@ -47,6 +49,14 @@ public class UserDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
 
