@@ -11,13 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Role;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import util.HibernateUtil;
 import util.threads.MailSender;
 
-@WebServlet(name = "Login", urlPatterns = {"/auth/admin/SignIn"})
+@WebServlet(name = "Login", urlPatterns = {"/auth/admin/login"})
 public class AdminLogin extends HttpServlet {
 
     @Override
@@ -28,6 +29,8 @@ public class AdminLogin extends HttpServlet {
         Gson gson = new Gson();
 
         UserLoginDTO userLoginDTO = gson.fromJson(request.getReader(), UserLoginDTO.class);
+        System.out.println(userLoginDTO.getEmail());
+        System.out.println(userLoginDTO.getPassword());
 
         if (userLoginDTO.getEmail().isEmpty()) {
             responseDto.setMessage("Please enter your Email");
@@ -45,7 +48,7 @@ public class AdminLogin extends HttpServlet {
 
                 User user = (User) criteria1.list().get(0);
 
-                if (!user.getRole().equals("admin")) {
+                if (user.getRole() != Role.admin) {
                     responseDto.setMessage("You are not an admin. Please use regular Sign In");
 
                 } else {
@@ -88,4 +91,9 @@ public class AdminLogin extends HttpServlet {
 
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().write("Admin Sign In");
+    }
+    
 }

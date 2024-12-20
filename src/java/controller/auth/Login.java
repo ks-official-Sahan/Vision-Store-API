@@ -17,7 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import util.HibernateUtil;
 import util.threads.MailSender;
 
-@WebServlet(name = "Login", urlPatterns = {"/auth/Login"})
+@WebServlet(name = "Login", urlPatterns = {"/auth/Logon"})
 public class Login extends HttpServlet {
 
     @Override
@@ -69,7 +69,8 @@ public class Login extends HttpServlet {
 
                     
                     // store session
-                    request.getSession().setAttribute("user", gson.toJson(userDTO));
+                    // request.getSession().setAttribute("user", gson.toJson(userDTO));
+                    request.getSession().setAttribute("user", userDTO);
                     request.getSession().removeAttribute("email");
                     request.getSession().removeAttribute("type");
 

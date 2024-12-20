@@ -1,6 +1,8 @@
 package controller.search;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import dto.ItemDTO;
 import dto.request.ProductSearchDTO;
 import dto.response.ProductSearchResponse;
 import dto.response.ResponseDTO;
@@ -9,6 +11,7 @@ import entity.Item;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +24,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import util.HibernateUtil;
 
-@WebServlet(name = "SearchItems", urlPatterns = {"/SearchItems"})
+@WebServlet(name = "SearchItems", urlPatterns = {"/api/SearchItems"})
 public class SearchItems extends HttpServlet {
 
     private Gson gson;
@@ -33,17 +36,20 @@ public class SearchItems extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         ResponseDTO responseDTO = new ResponseDTO();
 
         try {
-
-            ProductSearchDTO productSearchDTO = (ProductSearchDTO) gson.fromJson(request.getReader(), ProductSearchDTO.class);
+//            System.out.println(request.getReader().readLine());
+            ProductSearchDTO productSearchDTO = gson.fromJson(request.getReader(), ProductSearchDTO.class);
 
             Session session = HibernateUtil.getSessionFactory().openSession();
 
             //get all items from DB
-            Criteria criteria1 = session.createCriteria(Item.class);
+            Criteria itemCriteria = session.createCriteria(Item.class);
+
+            if (!productSearchDTO.getSearchText().isEmpty()) {
+                itemCriteria.add(Restrictions.like("title", "%" + productSearchDTO.getSearchText() + "%"));
+            }
 
             //add category fillter
             if (!productSearchDTO.getCategoryName().isEmpty()) {
@@ -56,51 +62,72 @@ public class SearchItems extends HttpServlet {
                 Category category = (Category) criteria2.uniqueResult();
 
                 //fillter products by category
-                criteria1.add(Restrictions.eq("category", category));
+                itemCriteria.add(Restrictions.eq("category", category));
             }
 
             ////sort section start
             double priceRangeStart = productSearchDTO.getPriceRangeStart();
             double priceRangeEnd = productSearchDTO.getPriceRangeEnd();
 
-            criteria1.add(Restrictions.ge("price", priceRangeStart));
-            criteria1.add(Restrictions.le("price", priceRangeEnd));
+            if (productSearchDTO.getPriceRangeStart() > 0) {
+                itemCriteria.add(Restrictions.ge("price", priceRangeStart));
+            }
+            if (productSearchDTO.getPriceRangeEnd() > 0) {
+                itemCriteria.add(Restrictions.le("price", priceRangeEnd));
+            }
 
             String sortText = productSearchDTO.getSortText();
 
             if (sortText.equals("Sort by Latest")) {
-                criteria1.addOrder(Order.desc("id"));
+                System.out.println("Sort Text L here");
+                itemCriteria.addOrder(Order.desc("id"));
             } else if (sortText.equals("Sort by Oldest")) {
-                criteria1.addOrder(Order.asc("id"));
-            } else if (sortText.equals("Sort by Name")) {
-                criteria1.addOrder(Order.asc("title"));
-            } else if (sortText.equals("Sort by Price")) {
-                criteria1.addOrder(Order.asc("price"));
+                itemCriteria.addOrder(Order.asc("id"));
+            } else if (sortText.equals("Sort by Name ASC")) {
+                itemCriteria.addOrder(Order.asc("title"));
+            } else if (sortText.equals("Sort by Name DESC")) {
+                itemCriteria.addOrder(Order.desc("title"));
+            } else if (sortText.equals("Sort by Price ASC")) {
+                itemCriteria.addOrder(Order.asc("price"));
+            } else if (sortText.equals("Sort by Price DESC")) {
+                itemCriteria.addOrder(Order.desc("price"));
             }
-
             ////sort section end
+
             ProductSearchResponse productSearchResponse = new ProductSearchResponse();
-            productSearchResponse.setAllItemCount(criteria1.list().size());
+            productSearchResponse.setAllItemCount(itemCriteria.list().size());
 
             //set item range
-            criteria1.setFirstResult(0);
-            criteria1.setMaxResults(6);
+            itemCriteria.setFirstResult(0);
+            itemCriteria.setMaxResults(6);
 
             // get item list
-            List<Item> itemList = criteria1.list();
+            List<Item> itemList = itemCriteria.list();
 
             for (Item item : itemList) {
                 item.setShop(null);
             }
 
-            productSearchResponse.setItems(itemList);
+            List<ItemDTO> itemDTOs = itemList.stream()
+                    .map(item -> new ItemDTO(
+                    item.getId(),
+                    item.getTitle(),
+                    item.getName(),
+                    item.getPrice(),
+                    item.getDescription(),
+                    item.getImagePath(),
+                    item.getQuantity(),
+                    item.getCategory().getName()))
+                    .collect(Collectors.toList());
+
+            // productSearchResponse.setItems(itemList);
+            productSearchResponse.setItemList(itemDTOs);
 
             // response.getWriter().print(gson.toJson(productSearchResponse));
             responseDTO.setData(productSearchResponse);
             responseDTO.setStatus(true);
-
         } catch (Exception e) {
-            responseDTO.setMessage("server error");
+            responseDTO.setMessage("server error: " + e.getMessage());
             responseDTO.setCode(500);
         }
 
@@ -124,28 +151,23 @@ public class SearchItems extends HttpServlet {
 
                 response.setContentType("application/json");
                 response.getWriter().print(gson.toJson(itemList));
-
             } else {
 
                 Criteria criteria = session.createCriteria(Category.class);
                 List<Category> categoryList = criteria.list();
 
                 for (Category category : categoryList) {
-
                     for (Item item : category.getItemList()) {
-
                         item.setShop(null);
-
                     }
-
                 }
+
                 // response.getWriter().print(gson.toJson(categoryList));
                 responseDTO.setData(categoryList);
                 responseDTO.setStatus(true);
-
             }
-
         } catch (Exception e) {
+            e.printStackTrace();
             responseDTO.setMessage("server error");
             responseDTO.setCode(500);
         }
@@ -153,5 +175,4 @@ public class SearchItems extends HttpServlet {
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(responseDTO));
     }
-
 }

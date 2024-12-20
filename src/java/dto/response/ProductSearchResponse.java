@@ -4,15 +4,16 @@
  */
 package dto.response;
 
+import dto.ItemDTO;
 import entity.Item;
 import java.io.Serializable;
 import java.util.List;
 
+public class ProductSearchResponse implements Serializable {
 
-public class ProductSearchResponse implements Serializable{
-    
     private List<Item> items;
-    
+    private List<ItemDTO> itemList;
+
     private int allItemCount;
 
     public ProductSearchResponse() {
@@ -33,7 +34,13 @@ public class ProductSearchResponse implements Serializable{
     public void setAllItemCount(int allItemCount) {
         this.allItemCount = allItemCount;
     }
-    
-    
-    
+
+    public List<ItemDTO> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<ItemDTO> itemList) {
+        this.itemList = itemList;
+    }
+
 }

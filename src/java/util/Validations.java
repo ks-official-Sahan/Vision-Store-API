@@ -1,9 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package util;
-
 
 public class Validations {
 
@@ -17,20 +12,23 @@ public class Validations {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@#$%^&+=]).{8,}$");
 
     }
-    
-    public static boolean isInteger(String value){
-        
+
+    public static boolean isInteger(String value) {
+
         try {
-             int intValue = Integer.valueOf(value);
-             
-             return true;
-        
+            int intValue = Integer.valueOf(value);
+
+            return true;
+
         } catch (Exception e) {
-            
+
             return false;
-        }  
-        
+        }
+
     }
-    
-   
+
+    public static boolean VALIDATE_MOBILE(String mobile) {
+        return mobile.matches("^07[01245678]{1}[0-9]{7}$");
+    }
+
 }

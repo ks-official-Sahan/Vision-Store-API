@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dto.request;
 
 import java.io.Serializable;
@@ -10,11 +6,11 @@ import java.io.Serializable;
 public class ProductSearchDTO implements Serializable{
 
     private String categoryName;
-    private int freshness;
-    private double priceRangeStart;
-    private double priceRangeEnd;
+    private double priceRangeStart = 0;
+    private double priceRangeEnd = 0;
     private String sortText;
     private int first;
+    private String searchText;
 
     public ProductSearchDTO() {
     }
@@ -25,14 +21,6 @@ public class ProductSearchDTO implements Serializable{
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public int getFreshness() {
-        return freshness;
-    }
-
-    public void setFreshness(int freshness) {
-        this.freshness = freshness;
     }
 
     public double getPriceRangeStart() {
@@ -65,6 +53,14 @@ public class ProductSearchDTO implements Serializable{
 
     public void setFirst(int first) {
         this.first = first;
+    }
+
+    public String getSearchText() {
+        return searchText;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
     }
     
     

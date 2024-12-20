@@ -176,7 +176,8 @@ public class AddToCart extends HttpServlet {
             }
 
         } catch (Exception e) {
-            responseDTO.setMessage("server error");
+            e.printStackTrace();
+            responseDTO.setMessage("server error: "+ e.getMessage());
             responseDTO.setCode(500);
         }
 
